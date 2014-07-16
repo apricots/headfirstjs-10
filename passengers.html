@@ -1,0 +1,128 @@
+<html>
+<head>
+</head>
+<body>
+<script>
+var passengers = [
+  { name: "Jane", paid: true, ticket: "coach" },
+  { name: "Dr. Evel", paid: true, ticket: "firstclass" },
+  { name: "Sure", paid: false, ticket: "premium" },
+  { name: "Johnny", paid: true, ticket: "coach" }
+  ];
+
+function processPassengers (passengers, testFunction) {
+  for ( var i = 0; i < passengers.length; i++ ) {
+    // if the function returns true, then the plane shouldn't take off
+    if (testFunction(passengers[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+// check if on No Fly list - Dr. Evel
+// return true if it is Dr. Evel
+// return false it not Dr. Evel.
+function checkNoFlyList(passenger) {
+  return (passenger.name === "Dr. Evel");
+}
+
+
+// return true if not paid yet
+// return false if paid
+function checkNotPaid(passenger) {
+  return (!passenger.paid)
+}
+
+function printPassenger(passenger) {
+  var message = passenger.name;
+  if (passenger.paid) {
+    message = message + " has paid.";
+  }
+  else {
+    message = message + " has not paid.";
+  }
+
+  console.log(message);
+}
+
+var onNoFly = processPassengers(passengers, checkNoFlyList);
+if (!onNoFly) {
+  console.log("The plane can't take off because there is a passenger on the no fly list.");
+}
+
+var everyonePaid = processPassengers(passengers, checkNotPaid);
+if (!everyonePaid) {
+  console.log("The plane can't take off because not everyone has paid.");
+}
+
+processPassengers(passengers, printPassenger);
+
+// This Function returns a FUNCTION with the correct drinks associate with whatever class the passenger ticket says
+
+function createDrinkOrder(passenger) {
+  var orderFunction;
+  if (passenger.ticket === "firstclass") {
+    orderFunction = function () {
+      console.log("Would you like some wine?");
+    }
+  } else if (passenger.ticket === "premium") {
+    orderFunction = function() {
+      console.log("Would you like some soda?");
+    }
+  } else {
+    orderFunction = function() {
+      console.log("Would you like some water?");
+    }
+  }
+  return orderFunction;
+}
+
+// This Function is for serving each individual customer
+
+function serveCustomer(passenger) {
+  // use variables to keep track of what food options the customer gets since the cusotmer will have the same ticket class each time
+  var getDrinkOptions = createDrinkOrder(passenger);
+  var getDinnerOptions = getDinnerOrderFunction(passenger);
+  getDrinkOptions();
+  getDinnerOptions();
+  getDrinkOptions();
+  getDinnerOptions();
+}
+
+// This function handles serving all customers altogether
+function servePassengers(passengers) {
+  for (var i = 0; i < passengers.length; i++) {
+    serveCustomer(passengers[i]);
+  }
+}
+
+servePassengers(passengers);
+
+// This function gets the correct dinner options for the ticket for the passenger
+
+function getDinnerOrderFunction(passenger) {
+  var dinnerFunction;
+
+  if (passenger.ticket === 'firstclass') {
+    dinnerFunction = function () {
+      console.log("Would you like chicken or pasta?");
+    }
+  } else if (passenger.ticket === 'premium') {
+    dinnerFunction = function () {
+      console.log("Snack box or Cheese plate?");
+    }
+  } else {
+    dinnerFunction = function() {
+      console.log("Peanuts or Pretzels, ma'am?");
+    }
+  }
+  return dinnerFunction;
+}
+
+
+
+</script>
+</body>
+</html>
